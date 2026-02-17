@@ -25,3 +25,8 @@ spring:
 logging:
   level:
     com.promptvault: DEBUG
+
+# Groq API Key
+groq:
+  api:
+    key: gsk_tu_api_key_de_groq_aqui

@@ -25,3 +25,8 @@ server:
   error:
     include-message: always
     include-binding-errors: always
+
+# Groq API (gratis - https://console.groq.com)
+groq:
+  api:
+    key: ${GROQ_API_KEY:}

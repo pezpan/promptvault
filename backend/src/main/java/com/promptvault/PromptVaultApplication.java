@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Clase principal de PromptVault.
  * 
  * PromptVault es una plataforma REST API para gestionar prompts de IA
- * con funcionalidades de mejora automática usando Gemini API.
+ * con funcionalidades de mejora automática usando Groq API.
  */
 @SpringBootApplication
 public class PromptVaultApplication {
