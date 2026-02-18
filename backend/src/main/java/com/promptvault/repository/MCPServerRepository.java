@@ -24,8 +24,8 @@ public interface MCPServerRepository extends JpaRepository<MCPServer, Long> {
     /**
      * Busca servidores MCP que contengan un tag específico.
      */
-    @Query("SELECT m FROM MCPServer m WHERE :tag = ANY(m.tags)")
-    Page<MCPServer> findByTagsContaining(@Param("tag") String tag, Pageable pageable);
+    @Query(value = "SELECT * FROM mcp_servers m WHERE m.tags LIKE CONCAT('%,', :tag, ',%')", nativeQuery = true)
+    Page<MCPServer> findServersByTag(@Param("tag") String tag, Pageable pageable);
     
     /**
      * Busca servidores MCP verificados.

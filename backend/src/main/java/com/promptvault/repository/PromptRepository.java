@@ -16,7 +16,7 @@ public interface PromptRepository extends JpaRepository<Prompt, Long> {
     
     Page<Prompt> findByCategory(String category, Pageable pageable);
     
-    @Query(value = "SELECT * FROM prompts p WHERE ARRAY_CONTAINS(p.tags, :tag)", nativeQuery = true)
+    @Query(value = "SELECT * FROM prompts p WHERE p.tags LIKE CONCAT('%,', :tag, ',%')", nativeQuery = true)
     Page<Prompt> findByTagsContaining(@Param("tag") String tag, Pageable pageable);
     
     Page<Prompt> findByIsFavoriteTrue(Pageable pageable);

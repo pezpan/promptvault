@@ -6,6 +6,8 @@ import com.promptvault.dto.PromptUpdateRequest;
 import com.promptvault.exception.ResourceNotFoundException;
 import com.promptvault.model.Prompt;
 import com.promptvault.repository.PromptRepository;
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -24,12 +26,13 @@ public class PromptService {
     public PromptDTO createPrompt(PromptCreateRequest request) {
         log.info("Creando nuevo prompt: {}", request.getTitle());
         
+        List<String> requestTags = request.getTags();
         Prompt prompt = Prompt.builder()
             .title(request.getTitle())
             .description(request.getDescription())
             .content(request.getContent())
             .category(request.getCategory())
-            .tags(request.getTags())
+            .tags(requestTags != null && requestTags.size() > 0 ? "," + String.join(",", requestTags) + "," : "")
             .project(request.getProject())
             .isFavorite(false)
             .usageCount(0)
@@ -71,9 +74,10 @@ public class PromptService {
         if (request.getCategory() != null) {
             prompt.setCategory(request.getCategory());
         }
-        // if (request.getTags() != null) {
-        //     prompt.setTags(request.getTags());
-        // }
+        if (request.getTags() != null) {
+            List<String> requestTags = request.getTags();
+            prompt.setTags(requestTags != null && requestTags.size() > 0 ? "," + String.join(",", requestTags) + "," : "");
+        }
         if (request.getProject() != null) {
             prompt.setProject(request.getProject());
         }
@@ -111,7 +115,7 @@ public class PromptService {
             .description(prompt.getDescription())
             .content(prompt.getContent())
             .category(prompt.getCategory())
-            .tags(prompt.getTags())
+            .tags(prompt.getTags() != null && !prompt.getTags().isEmpty() ? Arrays.asList(prompt.getTags().split(",")) : List.of())
             .project(prompt.getProject())
             .isFavorite(prompt.getIsFavorite())
             .usageCount(prompt.getUsageCount())

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -17,7 +18,7 @@ public class PromptDTO {
     private String description;
     private String content;
     private String category;
-    private String[] tags;
+    private List<String> tags;
     private String project;
     private Boolean isFavorite;
     private Integer usageCount;

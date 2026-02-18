@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,7 +28,7 @@ public class PromptCreateRequest {
     @NotBlank(message = "La categoría es obligatoria")
     private String category;
     
-    private String[] tags;
+    private List<String> tags;
     
     private String project;
 }

@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "prompts", indexes = {
-    @Index(name = "idx_category", columnList = "category"),
     @Index(name = "idx_created_at", columnList = "created_at"),
     @Index(name = "idx_favorite", columnList = "is_favorite")
 })
@@ -41,8 +40,8 @@ public class Prompt {
     @Column(nullable = false, length = 50)
     private String category;
     
-    @Column(name = "tags")
-    private String[] tags;
+    @Column(name = "tags", length = 500)
+    private String tags;
     
     @Column(name = "project", length = 100)
     private String project;

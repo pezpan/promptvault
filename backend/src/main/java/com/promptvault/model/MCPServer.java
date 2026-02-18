@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "mcp_servers", indexes = {
-    @Index(name = "idx_category", columnList = "category"),
     @Index(name = "idx_verified", columnList = "verified"),
     @Index(name = "idx_usage_count", columnList = "usage_count")
 })
@@ -41,8 +40,8 @@ public class MCPServer {
     @Column(nullable = false, length = 50)
     private String category;
     
-    @Column(name = "tags")
-    private String[] tags;
+    @Column(name = "tags", length = 500)
+    private String tags;
     
     @Column(nullable = false, length = 100)
     private String command;

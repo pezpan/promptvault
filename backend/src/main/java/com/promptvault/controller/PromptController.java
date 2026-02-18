@@ -170,7 +170,7 @@ public class PromptController {
         
         sb.append("CATEGORÍA: ").append(prompt.getCategory()).append("\n");
         
-        if (prompt.getTags() != null && prompt.getTags().length > 0) {
+        if (prompt.getTags() != null && prompt.getTags().size() > 0) {
             sb.append("TAGS: ").append(String.join(", ", prompt.getTags())).append("\n");
         }
         
@@ -195,7 +195,7 @@ public class PromptController {
         
         sb.append("**Categoría**: ").append(prompt.getCategory()).append("  \n");
         
-        if (prompt.getTags() != null && prompt.getTags().length > 0) {
+        if (prompt.getTags() != null && prompt.getTags().size() > 0) {
             sb.append("**Tags**: ");
             for (String tag : prompt.getTags()) {
                 sb.append("`").append(tag).append("` ");
