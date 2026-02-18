@@ -29,4 +29,4 @@ logging:
 # Groq API Key
 groq:
   api:
-    key: your_groq_apy_key_here
+    key:
