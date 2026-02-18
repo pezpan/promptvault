@@ -29,4 +29,4 @@ logging:
 # Groq API Key
 groq:
   api:
-    key: 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
+    key: apikey
