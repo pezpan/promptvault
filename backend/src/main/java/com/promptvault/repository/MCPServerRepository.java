@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repositorio JPA para la entidad MCPServer.
@@ -49,4 +50,7 @@ public interface MCPServerRepository extends JpaRepository<MCPServer, Long> {
      * Busca servidores por categoría y verificados.
      */
     Page<MCPServer> findByCategoryAndVerifiedTrue(String category, Pageable pageable);
+
+    // El MCP server más popular (por usageCount)
+    Optional<MCPServer> findTopByOrderByUsageCountDesc();
 }

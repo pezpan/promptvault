@@ -57,6 +57,9 @@ public class Prompt {
     @Column(length = 20)
     @Builder.Default
     private String status = "published";
+
+    @Column(name = "last_improved_at")
+    private LocalDateTime lastImprovedAt;
     
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

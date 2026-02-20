@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 /**
  * Repositorio JPA para la entidad Prompt.
@@ -25,4 +26,12 @@ public interface PromptRepository extends JpaRepository<Prompt, Long> {
            "LOWER(p.title) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR " +
            "LOWER(p.content) LIKE LOWER(CONCAT('%', :searchTerm, '%'))")
     Page<Prompt> searchByTitleOrContent(@Param("searchTerm") String searchTerm, Pageable pageable);
+
+    // Contar prompts por categoría
+    @Query("SELECT p.category, COUNT(p) FROM Prompt p GROUP BY p.category")
+    List<Object[]> countByCategory();
+
+    // Contar prompts que han sido mejorados al menos una vez
+    @Query("SELECT COUNT(p) FROM Prompt p WHERE p.lastImprovedAt IS NOT NULL")
+    long countImprovedPrompts();
 }

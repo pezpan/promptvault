@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Long> {
@@ -24,4 +25,7 @@ public interface SkillRepository extends JpaRepository<Skill, Long> {
     Page<Skill> searchByNameOrDescription(@Param("searchTerm") String searchTerm, Pageable pageable);
     
     List<Skill> findTop10ByOrderByUsageCountDesc();
+
+    // La skill más usada (por usageCount)
+    Optional<Skill> findTopByOrderByUsageCountDesc();
 }

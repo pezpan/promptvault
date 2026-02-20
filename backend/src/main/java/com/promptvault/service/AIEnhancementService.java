@@ -3,12 +3,15 @@ package com.promptvault.service;
 import com.promptvault.dto.AIImprovementResponse;
 import com.promptvault.exception.ResourceNotFoundException;
 import com.promptvault.model.Prompt;
+import com.promptvault.model.PromptImprovement;
+import com.promptvault.repository.PromptImprovementRepository;
 import com.promptvault.repository.PromptRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList; // AÑADIDO
 import java.util.Arrays;
 import java.util.List;
@@ -23,6 +26,7 @@ public class AIEnhancementService {
     
     private final GroqClient groqClient;
     private final PromptRepository promptRepository;
+    private final PromptImprovementRepository promptImprovementRepository;
     
     /**
      * Mejora un prompt existente usando Groq API.
@@ -43,6 +47,16 @@ public class AIEnhancementService {
         try {
             // Llamar a Groq
             String groqResponse = groqClient.generateContent(improvementPrompt);
+
+            // Set lastImprovedAt and save prompt
+            prompt.setLastImprovedAt(LocalDateTime.now());
+            promptRepository.save(prompt);
+
+            // Create and save PromptImprovement record
+            PromptImprovement improvement = PromptImprovement.builder()
+                    .prompt(prompt)
+                    .build();
+            promptImprovementRepository.save(improvement);
             
             // Parsear respuesta
             return parseImprovementResponse(prompt.getContent(), groqResponse);
