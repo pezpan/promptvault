@@ -1,10 +1,14 @@
 package com.promptvault.controller;
 
 import com.promptvault.dto.GeneratePromptRequest;
+import com.promptvault.dto.SkillBuildRequest;
+import com.promptvault.dto.SkillBuildResult;
 import com.promptvault.dto.SkillDTO;
+import com.promptvault.service.SkillBuilderService;
 import com.promptvault.service.SkillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +27,7 @@ import java.util.Map;
 public class SkillController {
     
     private final SkillService skillService;
+    private final SkillBuilderService skillBuilderService;
     
     @GetMapping
     @Operation(summary = "Listar todas las skills")
@@ -67,5 +72,37 @@ public class SkillController {
     ) {
         String generatedPrompt = skillService.generatePrompt(id, request);
         return ResponseEntity.ok(Map.of("generatedPrompt", generatedPrompt));
+    }
+
+    @PostMapping("/build")
+    @Operation(
+        summary = "Generar una nueva Skill con IA",
+        description = """
+            Usa Groq IA para generar una Skill completa a partir de una descripción en
+            lenguaje natural. La IA crea automáticamente:
+            - El template parametrizable con {{PARAMETROS}}
+            - Los parámetros detectados y sus descripciones
+            - Un ejemplo de output
+            - Una puntuación estimada de calidad (0-100)
+            
+            **Ejemplo de request:**
+            ```json
+            {
+              "objective": "Quiero una skill para revisar código Python buscando vulnerabilidades de seguridad OWASP Top 10",
+              "targetAudience": "Desarrolladores Python con conocimientos de seguridad",
+              "exampleInputs": ["def login(user, pwd): return db.query(f'SELECT * FROM users WHERE pwd={pwd}')"],
+              "desiredOutputFormat": "Lista de vulnerabilidades con: severidad, CWE ID, descripción y código corregido",
+              "category": "security",
+              "saveToDatabase": false
+            }
+            ```
+            
+            **Nota:** Con `saveToDatabase: true` la skill se guarda directamente en BD
+            y puede usarse inmediatamente con `POST /api/skills/{id}/generate`.
+            """
+    )
+    public ResponseEntity<SkillBuildResult> buildSkill(
+            @Valid @RequestBody SkillBuildRequest request) {
+        return ResponseEntity.ok(skillBuilderService.buildSkill(request));
     }
 }
