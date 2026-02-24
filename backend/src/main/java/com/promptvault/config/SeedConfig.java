@@ -11,9 +11,11 @@ import org.springframework.context.annotation.Configuration;
 public class SeedConfig implements ApplicationRunner {
 
     private final ContextPackSeedService contextPackSeedService;
+    private final WorkflowSeedData workflowSeedData;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         contextPackSeedService.seed();
+        workflowSeedData.seedWorkflows();
     }
 }
