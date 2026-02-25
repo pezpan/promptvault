@@ -1,43 +1,56 @@
-# Generador de Issues - PromptVault
+# PromptVault
 
-Este directorio contiene TODAS las tareas necesarias para implementar PromptVault.
+**PromptVault** is a next-generation platform for managing, building, and automating AI prompts. Beyond a simple library, it provides a robust infrastructure for AI-agent orchestration through workflows, skills, and Model Context Protocol (MCP) integration.
 
-## Issues Generados
+## 🌟 Key Features
 
-### Configuración Base (01-07)
-- ✅ 01-pom-xml.md
-- ✅ 02-application-yml.md
-- 03-application-dev-yml.md
-- 04-main-class.md
-- 05-openapi-config.md
-- 06-cors-config.md
-- 07-exception-handler.md
+- 📝 **Advanced Prompt Library**: CRUD operations for prompts with multi-tag support and version tracking.
+- ⚡ **High-Speed AI (Groq)**: Integrated with Groq LPU™ for ultra-fast prompt enhancement and generation using Llama 3 models.
+- 🔗 **Workflows**: Chain multiple prompts together with **cumulative context**. Build complex pipelines where each step learns from the previous ones.
+- 🛠️ **Skills System**: Reusable, parameterized prompt templates. Includes an **AI Skill Builder** that creates tools from a simple description.
+- 🔌 **MCP Integration**: Manage and validate Model Context Protocol servers to give your AI access to tools like GitHub, Slack, and PostgreSQL.
+- 📦 **Context Packs**: Pre-configured bundles of Prompts, Skills, and MCP Servers for specific domains (Security, DevOps, Writing, etc.).
+- 🧪 **Built-in Testers**: Static and connectivity validation for MCP configurations.
 
-### Modelos (08-11)
-- 08-prompt-entity.md
-- 09-category-entity.md
-- 10-prompt-repository.md
-- 11-category-repository.md
+## 🛠️ Tech Stack
 
-### DTOs y Services (12-13)
-- 12-prompt-dto.md
-- 13-prompt-service.md
+- **Backend**: Java 17, Spring Boot 3.2.2, Spring Data JPA.
+- **Database**: H2 (In-memory for dev), PostgreSQL (Production).
+- **AI Engine**: Groq API (llama-3.3-70b-versatile).
+- **Documentation**: Swagger/OpenAPI 3.0.
 
-### Controllers (14-15)
-- 14-prompt-controller.md
-- 15-category-controller.md
+## 🚀 Getting Started
 
-### Datos (16)
-- 16-data-sql.md
+### Prerequisites
+- Java 17 or higher
+- Maven 3.6+
+- A [Groq API Key](https://console.groq.com/) (Free)
 
-### IA Features (17-19)
-- 17-gemini-client.md
-- 18-ai-service.md
-- 19-improve-endpoint.md
+### Configuration
+1. Clone the repository.
+2. Set your Groq API Key as an environment variable:
+   ```bash
+   export GROQ_API_KEY=your_key_here
+   ```
+   *On Windows (PowerShell):* `$env:GROQ_API_KEY="your_key_here"`
 
-### Extras (20)
-- 20-export-endpoint.md
+### Running the Application
+```bash
+cd backend
+mvn spring-boot:run
+```
+The server will start at `http://localhost:8080`.
 
-## Cómo Usar
+### API Documentation
+Once the app is running, you can explore the interactive API docs:
+- **Swagger UI**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+- **API Docs**: `http://localhost:8080/api-docs`
 
-Ver IMPLEMENTATION-GUIDE.md en docs/
+## 📖 Architecture
+For a deep dive into the technical design, entities, and flow, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## 🤖 Agents & Automation
+Learn how to build AI agents using our Workflow and Skill systems in [AGENTS.md](./AGENTS.md).
+
+---
+*Created with ❤️ for the AI Engineering community.*
