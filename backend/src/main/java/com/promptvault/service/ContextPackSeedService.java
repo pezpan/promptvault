@@ -51,7 +51,7 @@ public class ContextPackSeedService {
 
         // Pack 1: Security Audit
         createPack("Security Audit Pack", 
-            "Todo lo necesario para auditorías de seguridad en código", "🔒", "security",
+            "Todo lo necesario para auditorías de seguridad en código", "security-lock", "security",
             List.of("Java Bug Fixer"), 
             List.of("Bug Hunter"), 
             List.of("GitHub", "Filesystem"),
@@ -59,7 +59,7 @@ public class ContextPackSeedService {
 
         // Pack 2: AI Development
         createPack("AI Development Pack", 
-            "Prompts y herramientas para construir mejores aplicaciones con IA", "🤖", "ai-development",
+            "Prompts y herramientas para construir mejores aplicaciones con IA", "ai-bot", "ai-development",
             List.of("Java Bug Fixer", "React Component Generator", "Unit Test Generator"), 
             List.of("Code Reviewer Expert", "API Documentation Writer", "Refactoring Assistant"), 
             List.of("Filesystem", "Fetch"),
@@ -67,7 +67,7 @@ public class ContextPackSeedService {
 
         // Pack 3: Database Development
         createPack("Database Development Pack", 
-            "Gestión, optimización y consultas de bases de datos", "🗄️", "database",
+            "Gestión, optimización y consultas de bases de datos", "database-storage", "database",
             List.of("React Component Generator"), 
             List.of("Test Generator Pro"), 
             List.of("PostgreSQL", "SQLite"),
@@ -75,7 +75,7 @@ public class ContextPackSeedService {
 
         // Pack 4: Content Writing
         createPack("Content Writing Pack", 
-            "Herramientas para redactores y creadores de contenido", "📝", "writing",
+            "Herramientas para redactores y creadores de contenido", "writing-pen", "writing",
             List.of("Unit Test Generator"), 
             List.of("API Documentation Writer"), 
             List.of("Brave Search", "Google Drive"),

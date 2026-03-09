@@ -17,7 +17,6 @@ public class StatsService {
     private final PromptImprovementRepository improvementRepository;
     private final MCPServerRepository mcpServerRepository;
     private final SkillRepository skillRepository;
-    private final CategoryRepository categoryRepository; // This repository was not requested, but it is in the provided code.
 
     public DashboardDTO getDashboard() {
         return DashboardDTO.builder()
@@ -52,7 +51,7 @@ public class StatsService {
         List<Object[]> raw = promptRepository.countByCategory();
         Map<String, Long> byCategory = raw.stream()
                 .collect(Collectors.toMap(
-                        r -> (String) r[0],
+                        r -> r[0].toString(),
                         r -> (Long) r[1]
                 ));
 

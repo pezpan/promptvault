@@ -1,0 +1,18 @@
+# Ignorar artefactos de compilación y carpetas de IDE
+target/
+.idea/
+.vscode/
+*.class
+*.log
+.settings/
+.project
+.classpath
+bin/
+
+# Ignorar archivos temporales de Gemini
+.gemini/
+
+# Ignorar documentación de issues (ya que el estado actual es el código)
+# docs/issues/ 
+# Nota: Los mantengo comentados por si se requiere histórico, 
+# pero idealmente Gemini debe leer el código fuente como fuente de verdad.

@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,19 +39,22 @@ public class ContextPack {
     @ElementCollection
     @CollectionTable(name = "context_pack_prompts", joinColumns = @JoinColumn(name = "pack_id"))
     @Column(name = "prompt_id")
-    private List<Long> promptIds;
+    @Builder.Default
+    private List<Long> promptIds = new ArrayList<>();
 
     // IDs de skills incluidas
     @ElementCollection
     @CollectionTable(name = "context_pack_skills", joinColumns = @JoinColumn(name = "pack_id"))
     @Column(name = "skill_id")
-    private List<Long> skillIds;
+    @Builder.Default
+    private List<Long> skillIds = new ArrayList<>();
 
     // IDs de MCP servers incluidos
     @ElementCollection
     @CollectionTable(name = "context_pack_mcps", joinColumns = @JoinColumn(name = "pack_id"))
     @Column(name = "mcp_id")
-    private List<Long> mcpServerIds;
+    @Builder.Default
+    private List<Long> mcpServerIds = new ArrayList<>();
 
     // Instrucciones de setup en Markdown
     @Column(columnDefinition = "TEXT")
@@ -60,7 +64,8 @@ public class ContextPack {
     @ElementCollection
     @CollectionTable(name = "context_pack_tags", joinColumns = @JoinColumn(name = "pack_id"))
     @Column(name = "tag")
-    private List<String> tags;
+    @Builder.Default
+    private List<String> tags = new ArrayList<>();
 
     @Builder.Default
     private int usageCount = 0;

@@ -10,7 +10,7 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     show-sql: true
     defer-datasource-initialization: true
     properties:
@@ -21,12 +21,15 @@ spring:
   sql:
     init:
       mode: always
+      continue-on-error: false
 
 logging:
   level:
     com.promptvault: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
-# Groq API Key
+# Groq API Key (usar variable de entorno GROQ_API_KEY)
 groq:
   api:
-    key:
+    key: ${GROQ_API_KEY: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}

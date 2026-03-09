@@ -120,6 +120,8 @@ public class PromptService {
             .isFavorite(prompt.getIsFavorite())
             .usageCount(prompt.getUsageCount())
             .status(prompt.getStatus())
+            .qualityScore(prompt.getQualityScore())
+            .lastImprovedAt(prompt.getLastImprovedAt())
             .createdAt(prompt.getCreatedAt())
             .updatedAt(prompt.getUpdatedAt())
             .build();

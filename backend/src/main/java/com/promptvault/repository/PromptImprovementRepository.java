@@ -10,4 +10,6 @@ import java.util.List;
 public interface PromptImprovementRepository extends JpaRepository<PromptImprovement, Long> {
 
     List<PromptImprovement> findTop5ByOrderByCreatedAtDesc();
+
+    List<PromptImprovement> findByPromptIdOrderByCreatedAtDesc(Long promptId);
 }

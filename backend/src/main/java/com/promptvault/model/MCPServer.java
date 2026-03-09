@@ -41,19 +41,23 @@ public class MCPServer {
     private String category;
     
     @Column(name = "tags", length = 500)
-    private String tags;
+    @Builder.Default
+    private String tags = "";
     
     @Column(nullable = false, length = 100)
     private String command;
     
     @Column(name = "args", columnDefinition = "TEXT")
-    private String args;  // JSON array como string: ["arg1", "arg2"]
+    @Builder.Default
+    private String args = "[]";  // JSON array como string: ["arg1", "arg2"]
     
     @Column(name = "env_vars", columnDefinition = "TEXT")
-    private String envVars;  // JSON object como string: {"KEY": "value"}
+    @Builder.Default
+    private String envVars = "{}";  // JSON object como string: {"KEY": "value"}
     
     @Column(name = "capabilities", columnDefinition = "TEXT")
-    private String capabilities;  // JSON array: ["read", "write"]
+    @Builder.Default
+    private String capabilities = "[]";  // JSON array: ["read", "write"]
     
     @Column(name = "documentation", length = 500)
     private String documentation;

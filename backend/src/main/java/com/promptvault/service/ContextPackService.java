@@ -60,7 +60,7 @@ public class ContextPackService {
         ContextPack pack = ContextPack.builder()
                 .name(req.getName())
                 .description(req.getDescription())
-                .emoji(req.getEmoji() != null ? req.getEmoji() : "📦")
+                .emoji(req.getEmoji() != null ? req.getEmoji() : "package-box")
                 .category(req.getCategory())
                 .promptIds(req.getPromptIds() != null ? req.getPromptIds() : List.of())
                 .skillIds(req.getSkillIds() != null ? req.getSkillIds() : List.of())

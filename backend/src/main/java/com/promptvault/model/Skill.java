@@ -41,13 +41,15 @@ public class Skill {
     private String promptTemplate;
     
     @Column(name = "parameters", columnDefinition = "TEXT")
-    private String parameters;  // JSON array de parámetros
+    @Builder.Default
+    private String parameters = "[]";  // JSON array de parámetros
     
     @Column(name = "example_output", columnDefinition = "TEXT")
     private String exampleOutput;
     
     @Column(name = "tags", length = 500)
-    private String tags;
+    @Builder.Default
+    private String tags = "";
     
     @Column(name = "usage_count")
     @Builder.Default

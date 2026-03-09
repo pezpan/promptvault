@@ -54,6 +54,10 @@ public class Prompt {
     @Builder.Default
     private Integer usageCount = 0;
     
+    @Column(name = "quality_score")
+    @Builder.Default
+    private Integer qualityScore = 50;
+    
     @Column(length = 20)
     @Builder.Default
     private String status = "published";
@@ -68,7 +72,4 @@ public class Prompt {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-    
-    @Version
-    private Integer version;
 }

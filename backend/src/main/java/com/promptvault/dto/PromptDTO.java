@@ -23,6 +23,8 @@ public class PromptDTO {
     private Boolean isFavorite;
     private Integer usageCount;
     private String status;
+    private Integer qualityScore;
+    private LocalDateTime lastImprovedAt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
