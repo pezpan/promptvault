@@ -18,14 +18,14 @@ public class SkillDTO {
     private String category;
     private String description;
     private String promptTemplate;
-    private List<SkillParameter> parameters;
+    private List<String> parameters;
     private String exampleOutput;
     private List<String> tags;
     private Integer usageCount;
     private String difficultyLevel;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
     @Data
     @Builder
     @NoArgsConstructor

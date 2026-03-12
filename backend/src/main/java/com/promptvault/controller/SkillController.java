@@ -3,6 +3,7 @@ package com.promptvault.controller;
 import com.promptvault.dto.GeneratePromptRequest;
 import com.promptvault.dto.SkillBuildRequest;
 import com.promptvault.dto.SkillBuildResult;
+import com.promptvault.dto.SkillCreateRequest;
 import com.promptvault.dto.SkillDTO;
 import com.promptvault.service.SkillBuilderService;
 import com.promptvault.service.SkillService;
@@ -28,6 +29,13 @@ public class SkillController {
     
     private final SkillService skillService;
     private final SkillBuilderService skillBuilderService;
+
+    @PostMapping
+    @Operation(summary = "Crear una nueva skill")
+    public ResponseEntity<SkillDTO> createSkill(@Valid @RequestBody SkillCreateRequest request) {
+        SkillDTO skill = skillService.createSkill(request);
+        return ResponseEntity.ok(skill);
+    }
     
     @GetMapping
     @Operation(summary = "Listar todas las skills")
