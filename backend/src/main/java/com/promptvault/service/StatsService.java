@@ -17,6 +17,8 @@ public class StatsService {
     private final PromptImprovementRepository improvementRepository;
     private final MCPServerRepository mcpServerRepository;
     private final SkillRepository skillRepository;
+    private final WorkflowRepository workflowRepository;
+    private final ContextPackRepository contextPackRepository;
 
     public DashboardDTO getDashboard() {
         return DashboardDTO.builder()
@@ -32,6 +34,8 @@ public class StatsService {
         long totalImprovements = improvementRepository.count();
         long totalMcpServers = mcpServerRepository.count();
         long totalSkills = skillRepository.count();
+        long totalWorkflows = workflowRepository.count();
+        long totalContextPacks = contextPackRepository.count();
         long improvedPrompts = promptRepository.countImprovedPrompts();
 
         double improvementRatio = totalPrompts > 0
@@ -43,6 +47,8 @@ public class StatsService {
                 .totalImprovements(totalImprovements)
                 .totalMcpServers(totalMcpServers)
                 .totalSkills(totalSkills)
+                .totalWorkflows(totalWorkflows)
+                .totalContextPacks(totalContextPacks)
                 .improvementRatio(improvementRatio)
                 .build();
     }

@@ -173,8 +173,10 @@ public class WorkflowExecutionEngine {
             case FREE_PROMPT -> {
                 String template = step.getPromptTemplate() != null
                         ? step.getPromptTemplate() : "";
-                // Sustituir {{PREVIOUS_OUTPUT}} en el template libre
-                yield template.replace("{{PREVIOUS_OUTPUT}}", previousOutput);
+                // Sustituir {{PREVIOUS_OUTPUT}} o {PREVIOUS_OUTPUT} en el template libre
+                template = template.replace("{{PREVIOUS_OUTPUT}}", previousOutput);
+                template = template.replace("{PREVIOUS_OUTPUT}", previousOutput);
+                yield template;
             }
 
             case TRANSFORM -> buildTransformPrompt(step.getTransformType(), previousOutput);
@@ -208,14 +210,21 @@ public class WorkflowExecutionEngine {
                     if ("__PREVIOUS_OUTPUT__".equals(value)) {
                         value = previousOutput;
                     }
+                    // Soportar tanto {{PARAM}} como {PARAM}
                     template = template.replace("{{" + entry.getKey() + "}}", value);
+                    template = template.replace("{" + entry.getKey() + "}", value);
                 }
             } catch (Exception e) {
                 log.warn("Error parsing skill parameters JSON: {}", e.getMessage());
             }
         } else {
-            // Sin parámetros explícitos: inyectar previousOutput en el primer {{PARAM}}
-            template = template.replaceFirst("\\{\\{[A-Z_]+\\}\\}", previousOutput);
+            // Sin parámetros explícitos: inyectar previousOutput en el primer placeholder encontrado
+            // Intenta primero {{...}} y luego {...}
+            if (template.contains("{{")) {
+                template = template.replaceFirst("\\{\\{[A-Z_a-z0-9]+\\}\\}", previousOutput);
+            } else {
+                template = template.replaceFirst("\\{[A-Z_a-z0-9]+\\}", previousOutput);
+            }
         }
 
         return template;

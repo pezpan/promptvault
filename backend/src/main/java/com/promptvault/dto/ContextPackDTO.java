@@ -23,4 +23,7 @@ public class ContextPackDTO {
     private int promptCount;
     private int skillCount;
     private int mcpServerCount;
+    
+    // Configuración MCP generada para el pack
+    private String generatedMcpConfig;
 }

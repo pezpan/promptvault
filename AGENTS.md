@@ -4,10 +4,10 @@ PromptVault provides the foundational infrastructure to build, test, and deploy 
 
 ## 🔗 Chained Intelligence: Workflows
 
-A **Workflow** in PromptVault is more than a list of steps; it's a **chain of thought**. 
+A **Workflow** in PromptVault is more than a list of steps; it's a **chain of thought**.
 
 ### Cumulative Context
-Unlike traditional pipelines, each step in a PromptVault Workflow has access to the full history of the interaction. 
+Unlike traditional pipelines, each step in a PromptVault Workflow has access to the full history of the interaction.
 - **Step 1** analyzes code.
 - **Step 2** generates tests based on **Step 1's** analysis.
 - **Step 3** summarizes everything for a human reviewer.
@@ -59,6 +59,34 @@ Don't guess if your agent's tools are working. Use the **MCP Tester** (`POST /ap
 - **`MCPConnectivityService`**: Real-time HTTP connectivity testing
 - **`MCPTesterService`**: Orchestration layer that runs both validators (see `testById()` method)
 
+### 🔌 MCP Configuration Template
+
+**NEW**: Generate MCP configuration showing environment variable keys:
+
+```bash
+GET /api/mcp-servers/{id}/config-template
+```
+
+**Example Response** for GitHub server:
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_TOKEN": "<GITHUB_TOKEN_VALUE>"
+      }
+    }
+  }
+}
+```
+
+This endpoint is useful for:
+- Displaying required environment variables in UI
+- Generating configuration templates for users
+- Testing MCP server setups before deployment
+
 ---
 
 ## 🏗️ Meta-AI: Skill Builder
@@ -70,7 +98,7 @@ The **Skill Builder** is our "AI generating AI" feature. If you know what you wa
 2. Provide example inputs.
 3. The AI generates a parameterized **Skill** with a professional template, detected parameters, and quality scoring.
 
-**Implementation**: 
+**Implementation**:
 - Call `SkillBuilderService.buildSkill(SkillBuildRequest)` to generate skills via `GroqClient`
 - Uses `SkillBuildResult` and `GeneratedSkill` DTOs to structure the response
 - Automatically detects parameters and creates a reusable skill in the database
@@ -86,6 +114,14 @@ The **Skill Builder** is our "AI generating AI" feature. If you know what you wa
 - The required **MCP Servers** (tools).
 
 Instead of configuring 10 different things, you load one Pack and your agent is ready to work in a specific domain (e.g., `Security Audit Pack`).
+
+### Pre-loaded Context Packs
+
+The application includes 4 ready-to-use Context Packs:
+1. **AI Development Pack**: Prompts and skills for AI-assisted development
+2. **Security Audit Pack**: Tools for security analysis and vulnerability detection
+3. **Database Development Pack**: SQL and database-related prompts and MCP servers
+4. **Content Writing Pack**: Writing and content generation tools
 
 ---
 
@@ -146,10 +182,13 @@ Core services in `com.promptvault.service`:
 - **`MCPTesterService`**: Validates and tests MCP server configurations
 - **`PromptService`, `SkillService`, `ContextPackService`**: CRUD operations for core entities
 - **`StatsService`**: Aggregates usage metrics (execution counts, timestamps)
+  - **NEW**: `getGlobalStats()` now includes `totalWorkflows` and `totalContextPacks`
 
 ### Code Organization
 - **`model/`**: JPA Entities (`Workflow`, `Skill`, `MCPServer`, `ContextPack`, etc.)
 - **`dto/`**: Request/Response contracts (strict separation from JPA entities)
+  - **NEW**: `GlobalStatsDTO` includes workflow and context pack counters
+  - **NEW**: `MCPServerDTO` includes `configJson` field for MCP configuration
 - **`repository/`**: Spring Data JPA interfaces with optimized queries
 - **`controller/`**: REST endpoints with Swagger annotations
 - **`config/`**: Seed data, CORS, OpenAPI setup
@@ -200,6 +239,34 @@ Bundle related Skills + MCP Servers + Prompts into a ContextPack:
 - **Manual**: `POST /api/skills` with template and parameters
 - **AI-Generated**: `POST /api/skills/build` with objective and examples
 - Both accept `{{PARAM_NAME}}` placeholders for parameter substitution
+
+---
+
+## 📊 Statistics & Monitoring
+
+Track usage and adoption with the Stats API:
+
+```bash
+GET /api/stats/global
+```
+
+**Response**:
+```json
+{
+  "totalPrompts": 3,
+  "totalImprovements": 0,
+  "totalMcpServers": 6,
+  "totalSkills": 3,
+  "totalWorkflows": 3,
+  "totalContextPacks": 4,
+  "improvementRatio": 0.0
+}
+```
+
+Use these metrics for:
+- Dashboard displays in your UI
+- Monitoring platform adoption
+- Identifying popular resources
 
 ---
 

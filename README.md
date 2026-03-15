@@ -9,14 +9,18 @@
 - 🔗 **Workflows**: Chain multiple prompts together with **cumulative context**. Build complex pipelines where each step learns from the previous ones.
 - 🛠️ **Skills System**: Reusable, parameterized prompt templates. Includes an **AI Skill Builder** that creates tools from a simple description.
 - 🔌 **MCP Integration**: Manage and validate Model Context Protocol servers to give your AI access to tools like GitHub, Slack, and PostgreSQL.
+  - **Config Template Endpoint**: Generate MCP configuration showing environment variable keys (`GET /api/mcp-servers/{id}/config-template`)
+  - **Static & Connectivity Validation**: Test MCP servers before deployment
 - 📦 **Context Packs**: Pre-configured bundles of Prompts, Skills, and MCP Servers for specific domains (Security, DevOps, Writing, etc.).
 - 🧪 **Built-in Testers**: Static and connectivity validation for MCP configurations.
+- 📊 **Statistics Dashboard**: Real-time counters for all resources (Prompts, Skills, Workflows, MCP Servers, Context Packs).
 
 ## 🛠️ Tech Stack
 
 - **Backend**: Java 17, Spring Boot 3.2.2, Spring Data JPA.
 - **Database**: H2 (In-memory for dev), PostgreSQL (Production).
 - **AI Engine**: Groq API (llama-3.3-70b-versatile).
+- **Frontend**: React + TypeScript + Tailwind CSS (AI Studio).
 - **Documentation**: Swagger/OpenAPI 3.0.
 
 ## 🚀 Getting Started
@@ -51,6 +55,23 @@ For a deep dive into the technical design, entities, and flow, see [ARCHITECTURE
 
 ## 🤖 Agents & Automation
 Learn how to build AI agents using our Workflow and Skill systems in [AGENTS.md](./AGENTS.md).
+
+## 📦 Pre-loaded Content
+
+The application comes with seed data for quick start:
+- **5 Categories**: code-generation, debugging, refactoring, testing, documentation
+- **3 Example Prompts**: Java Bug Fixer, React Component Generator, Unit Test Generator
+- **6 MCP Servers**: GitHub, Filesystem, PostgreSQL, Slack, Brave Search, Memory
+- **3 Skills**: Code Reviewer Expert, Test Generator Pro, API Documentation Writer
+- **3 Workflows**: Pre-configured automation pipelines
+- **4 Context Packs**: AI Development, Security Audit, Database Development, Content Writing
+
+## 🔧 Recent Improvements (v1.1.0)
+
+- ✅ **MCP Config Template**: New endpoint to generate MCP configuration with environment variable placeholders
+- ✅ **Stats API Enhancement**: Added counters for Workflows and Context Packs
+- ✅ **Jackson Configuration**: Proper serialization of all DTO fields
+- ✅ **Frontend Integration**: AI Studio React app with full API integration
 
 ---
 *Created with ❤️ for the AI Engineering community.*

@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import java.util.Map; // Import for Map
 @RestController
 @RequestMapping("/api/mcp-servers")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "MCP Servers", description = "API para gestión de servidores MCP")
 public class MCPServerController {
     
@@ -94,9 +96,11 @@ public class MCPServerController {
     @PostMapping("/generate-config")
     @Operation(summary = "Genera archivo de configuración para múltiples servidores MCP")
     public ResponseEntity<String> generateConfig(@RequestBody GenerateConfigRequest request) {
+        log.info("Generando configuración para {} servidores", request.getServerIds().size());
         String config = mcpServerService.generateConfig(request.getServerIds(), request.getEnvVars());
+        
         return ResponseEntity.ok()
-            .header("Content-Type", "application/json")
+            .header("Content-Type", "application/json;charset=UTF-8")
             .header("Content-Disposition", "attachment; filename=\"mcp-config.json\"")
             .body(config);
     }
@@ -112,5 +116,17 @@ public class MCPServerController {
             ))
             .toList();
         return ResponseEntity.ok(categories);
+    }
+
+    // NEW ENDPOINT: Get Config Template for single server
+    @GetMapping("/{id}/config-template")
+    @Operation(summary = "Obtener plantilla de configuración mostrando las claves de variables de entorno")
+    public ResponseEntity<String> getConfigTemplate(@PathVariable Long id) {
+        log.info("Obteniendo plantilla de configuración para MCP server ID: {}", id);
+        String config = mcpServerService.getConfigTemplate(id);
+
+        return ResponseEntity.ok()
+            .header("Content-Type", "application/json;charset=UTF-8")
+            .body(config);
     }
 }

@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/skills")
 @RequiredArgsConstructor
+@Slf4j
 @Tag(name = "Skills", description = "API para skills (plantillas de prompts)")
 public class SkillController {
     
@@ -33,13 +35,20 @@ public class SkillController {
     @PostMapping
     @Operation(summary = "Crear una nueva skill")
     public ResponseEntity<SkillDTO> createSkill(@Valid @RequestBody SkillCreateRequest request) {
+        log.info("Creando skill: name={}, category={}, template length={}", 
+            request.getName(), request.getCategory(), 
+            request.getContent() != null ? request.getContent().length() : 0);
+        log.debug("SkillCreateRequest: name={}, description={}, content={}, category={}, parameters={}", 
+            request.getName(), request.getDescription(), request.getContent(), 
+            request.getCategory(), request.getParameters());
         SkillDTO skill = skillService.createSkill(request);
+        log.info("Skill creada exitosamente: id={}", skill.getId());
         return ResponseEntity.ok(skill);
     }
     
     @GetMapping
     @Operation(summary = "Listar todas las skills")
-    public ResponseEntity<Page<SkillDTO>> getAllSkills(
+    public ResponseEntity<?> getAllSkills(
         @PageableDefault(size = 20, sort = "usageCount", direction = Sort.Direction.DESC) Pageable pageable,
         @RequestParam(required = false) String category,
         @RequestParam(required = false) String tag // Added tag search parameter
@@ -54,8 +63,18 @@ public class SkillController {
         else {
             skills = skillService.getAllSkills(pageable);
         }
-        
-        return ResponseEntity.ok(skills);
+
+        // Devolver tanto el Page completo como un array 'skills' para compatibilidad
+        return ResponseEntity.ok(Map.of(
+            "content", skills.getContent(),
+            "skills", skills.getContent(),
+            "page", skills.getNumber(),
+            "totalPages", skills.getTotalPages(),
+            "totalElements", skills.getTotalElements(),
+            "size", skills.getSize(),
+            "first", skills.isFirst(),
+            "last", skills.isLast()
+        ));
     }
     
     @GetMapping("/{id}")
@@ -71,7 +90,16 @@ public class SkillController {
         List<SkillDTO> popular = skillService.getPopularSkills();
         return ResponseEntity.ok(popular);
     }
-    
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una skill")
+    public ResponseEntity<Void> deleteSkill(@PathVariable Long id) {
+        log.info("Eliminando skill: id={}", id);
+        skillService.deleteSkill(id);
+        log.info("Skill eliminida exitosamente: id={}", id);
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/{id}/generate")
     @Operation(summary = "Generar prompt personalizado desde una skill")
     public ResponseEntity<Map<String, String>> generatePrompt(

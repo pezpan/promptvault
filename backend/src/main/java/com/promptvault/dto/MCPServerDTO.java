@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
 public class MCPServerDTO {
     private Long id;
     private String name;
@@ -30,6 +32,7 @@ public class MCPServerDTO {
     private String officialUrl;
     private String installationInstructions;
     private String configExample;
+    private String configJson;  // Configuración generada dinámicamente con las claves de envVars
     private Integer usageCount;
     private Double rating;
     private Boolean verified;

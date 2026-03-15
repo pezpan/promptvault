@@ -1,7 +1,221 @@
-http://localhost:8080/swagger-ui/index.html
+# PromptVault - Comandos Útiles
 
-http://localhost:8080/h2-console/login.do
+## 🔧 Desarrollo Backend
 
+```bash
+# Navegar al directorio backend
+cd backend
+
+# Build completo con tests
+mvn clean install
+
+# Build sin tests
+mvn clean install -DskipTests
+
+# Ejecutar aplicación
+mvn spring-boot:run
+
+# Ejecutar tests
+mvn test
+
+# Ejecutar test específico
+mvn test -Dtest=MCPServerServiceTest
+
+# Build JAR para producción
+mvn clean package
+
+# Ejecutar JAR
+java -jar target/promptvault-backend-*.jar
+```
+
+## 🌐 URLs de Acceso
+
+### Backend
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **API Docs**: http://localhost:8080/api-docs
+- **H2 Console**: http://localhost:8080/h2-console (user: `sa`, no password)
+- **Health Check**: http://localhost:8080/actuator/health
+
+### Frontend (AI Studio)
+- **Development**: http://localhost:3000
+- **Comando**: `npm run dev` (desde directorio ai_studio)
+
+## 🔍 Endpoints API Principales
+
+### Statistics
+```bash
+curl http://localhost:8080/api/stats/global
+```
+
+### MCP Servers
+```bash
+# Listar todos
+curl http://localhost:8080/api/mcp-servers
+
+# Obtener por ID
+curl http://localhost:8080/api/mcp-servers/1
+
+# Config Template (NEW)
+curl http://localhost:8080/api/mcp-servers/1/config-template
+
+# Testear servidor
+curl -X POST http://localhost:8080/api/mcp-servers/1/test
+```
+
+### Workflows
+```bash
+# Listar todos
+curl http://localhost:8080/api/workflows
+
+# Ejecutar workflow
+curl -X POST http://localhost:8080/api/workflows/{id}/execute \
+  -H "Content-Type: application/json" \
+  -d '{"initialInput": "test input"}'
+```
+
+### Skills
+```bash
+# Listar todos
+curl http://localhost:8080/api/skills
+
+# Skill Builder (generar skill con IA)
+curl -X POST http://localhost:8080/api/skills/build \
+  -H "Content-Type: application/json" \
+  -d '{
+    "objective": "Crear un skill para revisar código",
+    "examples": ["ejemplo de entrada", "ejemplo de salida"]
+  }'
+```
+
+### Context Packs
+```bash
+# Listar todos
+curl http://localhost:8080/api/context-packs
+
+# Cargar pack
+curl -X POST http://localhost:8080/api/context-packs/{id}/load
+```
+
+## 🗄️ Base de Datos H2
+
+### Conexión
+- **URL**: `jdbc:h2:mem:promptvaultdb`
+- **Usuario**: `sa`
+- **Password**: (vacío)
+- **Console**: http://localhost:8080/h2-console
+
+### Consultas Útiles
+```sql
+-- Contar recursos
+SELECT COUNT(*) FROM prompts;
+SELECT COUNT(*) FROM skills;
+SELECT COUNT(*) FROM workflows;
+SELECT COUNT(*) FROM mcp_servers;
+SELECT COUNT(*) FROM context_packs;
+
+-- Ver MCP servers
+SELECT id, name, category, verified FROM mcp_servers;
+
+-- Ver workflows
+SELECT id, name, category, usage_count FROM workflows;
+```
+
+## 🐛 Debugging
+
+### Logs en tiempo real
+```bash
+# Ver logs de la aplicación
+tail -f backend/logs/application.log
+
+# O con Maven
+mvn spring-boot:run | grep -i "error\|warn"
+```
+
+### Variables de Entorno
+```bash
+# macOS/Linux
+export GROQ_API_KEY=your_key_here
+export SPRING_PROFILES_ACTIVE=dev
+
+# Windows PowerShell
+$env:GROQ_API_KEY="your_key_here"
+$env:SPRING_PROFILES_ACTIVE="dev"
+```
+
+## 🧪 Testing MCP Servers
+
+### Validación Estática
+```bash
+curl -X POST "http://localhost:8080/api/mcp-servers/1/test?testLevel=STATIC"
+```
+
+### Test de Conectividad
+```bash
+curl -X POST "http://localhost:8080/api/mcp-servers/1/test?testLevel=CONNECTIVITY"
+```
+
+### Test Completo
+```bash
+curl -X POST http://localhost:8080/api/mcp-servers/1/test
+```
+
+## 📦 Frontend (AI Studio)
+
+```bash
+# Navegar al directorio frontend
+cd ai_studio
+
+# Instalar dependencias
+npm install
+
+# Desarrollo
 npm run dev
 
-http://localhost:3000
+# Build producción
+npm run build
+
+# Ejecutar build
+npm run start
+
+# Lint
+npm run lint
+```
+
+## 🚀 Producción
+
+```bash
+# Set variables
+export GROQ_API_KEY=your_key
+export SPRING_PROFILES_ACTIVE=prod
+export DATABASE_URL=postgresql://user:pass@localhost:5432/promptvault
+
+# Build
+mvn clean package
+
+# Ejecutar
+java -jar target/promptvault-backend-*.jar
+
+# O con nohup para background
+nohup java -jar target/promptvault-backend-*.jar > app.log 2>&1 &
+```
+
+## 📊 Monitoreo
+
+### Stats del Sistema
+```bash
+# Obtener estadísticas globales
+curl http://localhost:8080/api/stats/global | jq
+
+# Ver contadores
+curl http://localhost:8080/api/stats/global | jq '.totalWorkflows, .totalContextPacks'
+```
+
+### Health Check
+```bash
+curl http://localhost:8080/actuator/health
+```
+
+---
+
+**Última actualización**: 2026-03-15
+**Versión**: v1.1.0

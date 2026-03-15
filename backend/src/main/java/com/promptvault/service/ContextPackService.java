@@ -80,6 +80,16 @@ public class ContextPackService {
     }
 
     private ContextPackDTO toDTO(ContextPack pack) {
+        // Cargar MCP servers para generar la config
+        List<MCPServerDTO> mcps = pack.getMcpServerIds() != null && !pack.getMcpServerIds().isEmpty()
+                ? mcpServerRepository.findAllById(pack.getMcpServerIds()).stream()
+                    .map(this::mcpServerToDTO)
+                    .collect(Collectors.toList())
+                : List.of();
+        
+        // Generar config JSON de todos los MCPs del pack
+        String mcpConfig = generateMcpConfigForPack(mcps);
+        
         return ContextPackDTO.builder()
                 .id(pack.getId())
                 .name(pack.getName())
@@ -91,6 +101,7 @@ public class ContextPackService {
                 .promptCount(pack.getPromptIds() != null ? pack.getPromptIds().size() : 0)
                 .skillCount(pack.getSkillIds() != null ? pack.getSkillIds().size() : 0)
                 .mcpServerCount(pack.getMcpServerIds() != null ? pack.getMcpServerIds().size() : 0)
+                .generatedMcpConfig(mcpConfig)
                 .build();
     }
 
@@ -171,6 +182,8 @@ public class ContextPackService {
                 .description(m.getDescription())
                 .category(m.getCategory())
                 .command(m.getCommand())
+                .args(parseJsonList(m.getArgs()))
+                .envVars(parseJsonMap(m.getEnvVars()))
                 .officialUrl(m.getOfficialUrl())
                 .verified(m.getVerified())
                 .usageCount(m.getUsageCount())
@@ -179,28 +192,64 @@ public class ContextPackService {
 
     private String generateMcpConfigForPack(List<MCPServerDTO> mcps) {
         if (mcps.isEmpty()) return "{}";
+        
         // Genera un JSON de config combinado para todos los MCPs del pack
         Map<String, Object> config = new LinkedHashMap<>();
         Map<String, Object> servers = new LinkedHashMap<>();
-        
+
         for (MCPServerDTO mcp : mcps) {
             String key = mcp.getName().toLowerCase().replace(" ", "-");
             Map<String, Object> serverConfig = new LinkedHashMap<>();
             serverConfig.put("command", mcp.getCommand() != null ? mcp.getCommand() : "npx");
-            
-            // Simular args si no los tenemos completos en el DTO simplificado
-            List<String> args = List.of("-y", "@modelcontextprotocol/server-" + key);
+
+            // Usar args reales o por defecto
+            List<String> args = mcp.getArgs() != null && !mcp.getArgs().isEmpty() 
+                ? mcp.getArgs() 
+                : List.of("-y", "@modelcontextprotocol/server-" + key);
             serverConfig.put("args", args);
             
+            // Agregar env vars con placeholders para mostrar las claves requeridas
+            if (mcp.getEnvVars() != null && !mcp.getEnvVars().isEmpty()) {
+                Map<String, String> envTemplate = new LinkedHashMap<>();
+                for (String envKey : mcp.getEnvVars().keySet()) {
+                    envTemplate.put(envKey, "<" + envKey + "_VALUE>");
+                }
+                serverConfig.put("env", envTemplate);
+            }
+
             servers.put(key, serverConfig);
         }
-        
+
         config.put("mcpServers", servers);
-        
+
         try {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(config);
         } catch (Exception e) {
             return "{}";
+        }
+    }
+    
+    /**
+     * Parsea JSON string a lista de strings.
+     */
+    private List<String> parseJsonList(String json) {
+        if (json == null || json.trim().isEmpty()) return new ArrayList<>();
+        try {
+            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return new ArrayList<>();
+        }
+    }
+    
+    /**
+     * Parsea JSON string a mapa de strings.
+     */
+    private Map<String, String> parseJsonMap(String json) {
+        if (json == null || json.trim().isEmpty()) return new HashMap<>();
+        try {
+            return objectMapper.readValue(json, new com.fasterxml.jackson.core.type.TypeReference<Map<String, String>>() {});
+        } catch (Exception e) {
+            return new HashMap<>();
         }
     }
 }

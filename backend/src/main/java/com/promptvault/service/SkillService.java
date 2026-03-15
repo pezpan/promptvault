@@ -89,6 +89,15 @@ public class SkillService {
                 .toList();
     }
 
+    @Transactional
+    public void deleteSkill(Long id) {
+        if (!skillRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Skill", "id", id);
+        }
+        skillRepository.deleteById(id);
+        log.info("Skill eliminida: id={}", id);
+    }
+
     /**
      * Genera un prompt personalizado a partir de una skill y parámetros.
      */
@@ -99,11 +108,11 @@ public class SkillService {
 
         String template = skill.getPromptTemplate();
 
-        // Reemplazar placeholders con valores
+        // Reemplazar placeholders con valores (soporta tanto {PARAM} como {{PARAM}})
         for (Map.Entry<String, Object> entry : request.getParameters().entrySet()) {
-            String placeholder = "{" + entry.getKey() + "}";
             String value = entry.getValue().toString();
-            template = template.replace(placeholder, value);
+            template = template.replace("{{" + entry.getKey() + "}}", value);
+            template = template.replace("{" + entry.getKey() + "}", value);
         }
 
         // Incrementar contador

@@ -26,6 +26,10 @@ server:
     include-message: always
     include-binding-errors: always
 
+# Jackson configuration to include all properties
+spring.jackson:
+  default-property-inclusion: always
+
 # Groq API Key (usar variable de entorno GROQ_API_KEY)
 # Obtén tu API key gratis en: https://console.groq.com/keys
 groq:
