@@ -32,4 +32,4 @@ logging:
 # Groq API Key (usar variable de entorno GROQ_API_KEY)
 groq:
   api:
-    key: ${GROQ_API_KEY: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}
+    key: ${GROQ_API_KEY:aqui_api_key}
